@@ -11,9 +11,14 @@ public class PantallaSpaceInvaders extends Pantalla
 {
     private Juego juego;
 
+    // Código
+
     // Enemigos
     //private Alien alien;    // borrar!!
     private Array<Alien> arrAliens;     // Guardar TODOS los aliens
+
+    // Personaje (Nave)
+    private Nave nave;
 
     public PantallaSpaceInvaders(Juego juego) {
         this.juego = juego;
@@ -23,6 +28,12 @@ public class PantallaSpaceInvaders extends Pantalla
     @Override
     public void show() {
         crearEnemigos();
+        crearNave();
+    }
+
+    private void crearNave() {
+        Texture texturaNave = new Texture("space/nave.png");
+        nave = new Nave(texturaNave, ANCHO/2, 0.07f*ALTO);
     }
 
     private void crearEnemigos() {
@@ -50,6 +61,8 @@ public class PantallaSpaceInvaders extends Pantalla
         for (Alien alien : arrAliens) {     // Automáticamente visita CADA objeto del arreglo
             alien.render(batch);
         }
+        // Dibujar nave
+        nave.render(batch);
         batch.end();
     }
 
