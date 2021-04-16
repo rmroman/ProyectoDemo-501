@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
+import mx.rmr.proyectodemo.runner.PantallaRunner;
+
 public class PantallaMenu extends Pantalla
 {
     // Referencia al juego principal
@@ -63,6 +65,14 @@ public class PantallaMenu extends Pantalla
         Button btnRunner = crearBoton("menu/btn_jugar_runner.png", "menu/btnInverso_jugar_space.png");
         btnRunner.setPosition(ANCHO/3, ALTO/3, Align.center);
         escenaMenu.addActor(btnRunner);
+        // Agregar
+        btnRunner.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Cambiar de pantalla (Runner)
+                juego.setScreen(new PantallaRunner(juego));
+            }
+        });
 
         Button btnConfiguracion = crearBoton("menu/btn_configuracion.png", "menu/btnInverso_jugar_space.png");
         btnConfiguracion.setPosition(2*ANCHO/3, ALTO/3, Align.center);

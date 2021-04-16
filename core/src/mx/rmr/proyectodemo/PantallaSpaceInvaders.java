@@ -2,9 +2,14 @@ package mx.rmr.proyectodemo;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+
+import mx.rmr.proyectodemo.utilerias.Texto;
+
 
 /*
 Representa un clon del juego Space Invaders
@@ -39,6 +44,13 @@ public class PantallaSpaceInvaders extends Pantalla
     // Botón de disparo
     private Texture texturaDisparo;
 
+    // Marcador (vidas, niveles, energía, estado)
+    private int puntos = 0;
+    private Texto texto;        // Escribe texto en la pantalla
+
+    // Botón BACK (regresa al menú principal)
+    private Texture texturaBack;
+
 
     public PantallaSpaceInvaders(Juego juego) {
         this.juego = juego;
@@ -51,9 +63,25 @@ public class PantallaSpaceInvaders extends Pantalla
         crearNave();
         crearBotonDisparo();
         crearTexturaBala();
+        crearTexto();
+        crearTexturaBack();
+        recuperarMarcador();
         
         // Ahora la misma pantalla RECIBE y PROCESA los eventos
         Gdx.input.setInputProcessor( new ProcesadorEntrada() );
+    }
+
+    private void recuperarMarcador() {
+        Preferences prefs = Gdx.app.getPreferences("PUNTAJE");
+        puntos = prefs.getInteger("puntos", 0);
+    }
+
+    private void crearTexturaBack() {
+        texturaBack = new Texture("space/back.png");
+    }
+
+    private void crearTexto() {
+        texto = new Texto("fonts/digital.fnt");
     }
 
     private void crearTexturaBala() {
@@ -110,6 +138,12 @@ public class PantallaSpaceInvaders extends Pantalla
 
         // Dibujar botón disparo
         batch.draw(texturaDisparo, ANCHO-texturaDisparo.getWidth()*2, texturaDisparo.getHeight()/2);
+
+        // Dibujar marcador
+        texto.mostrarMensaje(batch, Integer.toString(puntos), 0.95f*ANCHO, 0.9f*ALTO);
+
+        // Dibujar BACK
+        batch.draw(texturaBack, texturaBack.getWidth()/2, ALTO-3*texturaBack.getHeight()/2);
 
         batch.end();
     }
@@ -183,6 +217,8 @@ public class PantallaSpaceInvaders extends Pantalla
             if (bala.sprite.getBoundingRectangle().overlaps(alien.sprite.getBoundingRectangle())) {
                 // Le pego!!!!!
                 alien.setEstado(EstadoAlien.EXPLOTA);
+                // Contar puntos
+                puntos += 150;
                 // Desaparecer la bala
                 bala = null;    // No regresar al for
                 break;
@@ -240,7 +276,21 @@ public class PantallaSpaceInvaders extends Pantalla
             camara.unproject(v);    // Convierte de coordenadas FÍSICAS a LÓGICAS
             
             // v ya tiene coordenadas lógicas
-            // PRIMERO, probar si se hizo click dentro del botón de disparo
+            float anchoBack = texturaBack.getWidth();
+            float altoBack = texturaBack.getHeight();
+            float xBack = anchoBack/2;
+            float yBack = ALTO - 1.5f*altoBack;
+
+            // PRIMERO, verificar el botón de back
+            Rectangle rectBack = new Rectangle(xBack, yBack, anchoBack, altoBack);
+            if (rectBack.contains(v.x, v.y)) {
+                // SALIR, guardar el marcador
+                Preferences preferencias = Gdx.app.getPreferences("PUNTAJE");
+                preferencias.putInteger("puntos", puntos);
+                preferencias.flush();   // Guardan en disco
+                juego.setScreen(new PantallaMenu(juego));
+            } else
+            // SEGUNDO, probar si se hizo click dentro del botón de disparo
             if ( v.x>=ANCHO-2*texturaDisparo.getWidth() &&  v.x<=ANCHO - texturaDisparo.getWidth()
                     && v.y>=texturaDisparo.getHeight()/2 && v.y<=1.5f*texturaDisparo.getHeight()) {
                 // Disparar !!!!!
