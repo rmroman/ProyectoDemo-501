@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
+import mx.rmr.proyectodemo.plataformas.PantallaPlataformas;
 import mx.rmr.proyectodemo.runner.PantallaRunner;
 
 public class PantallaMenu extends Pantalla
@@ -48,6 +49,14 @@ public class PantallaMenu extends Pantalla
         btnMario.setPosition(ANCHO/3, 2*ALTO/3, Align.center);
         // Agregar a la escena el botón
         escenaMenu.addActor(btnMario);
+        btnMario.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Cambiar de pantalla (SpaceInvaders)
+                juego.setScreen(new PantallaPlataformas(juego));
+            }
+        });
+
 
         Button btnSpace = crearBoton("menu/btn_jugar_space.png",
                 "menu/btnInverso_jugar_space.png");
