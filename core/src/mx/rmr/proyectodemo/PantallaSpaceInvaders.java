@@ -1,6 +1,7 @@
 package mx.rmr.proyectodemo;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
@@ -69,6 +70,8 @@ public class PantallaSpaceInvaders extends Pantalla
         
         // Ahora la misma pantalla RECIBE y PROCESA los eventos
         Gdx.input.setInputProcessor( new ProcesadorEntrada() );
+
+        Gdx.input.setCatchKey(Input.Keys.BACK, true);
     }
 
     private void recuperarMarcador() {

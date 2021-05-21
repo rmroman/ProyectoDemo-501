@@ -1,6 +1,7 @@
 package mx.rmr.proyectodemo;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -35,6 +36,8 @@ public class PantallaMenu extends Pantalla
     public void show() {
 
         crearMenu();
+
+        Gdx.input.setCatchKey(Input.Keys.BACK, false);      // regresa al SO
     }
 
     private void crearMenu() {

@@ -1,6 +1,7 @@
 package mx.rmr.proyectodemo.runner;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import mx.rmr.proyectodemo.Juego;
 import mx.rmr.proyectodemo.Pantalla;
+import mx.rmr.proyectodemo.PantallaMenu;
 import mx.rmr.proyectodemo.PantallaSpaceInvaders;
 
 public class PantallaRunner extends Pantalla
@@ -62,6 +64,9 @@ public class PantallaRunner extends Pantalla
         // Pone el InputProcessor
         procesadorEntrada = new ProcesadorEntrada();
         Gdx.input.setInputProcessor(procesadorEntrada);
+
+        // Bloquear la tecla de BACK
+        Gdx.input.setCatchKey(Input.Keys.BACK, true);
     }
 
     private void crearBolas() {
@@ -111,6 +116,12 @@ public class PantallaRunner extends Pantalla
         // Dibujar la PAUSA
         if (estadoJuego == EstadoJuego.PAUSADO && escenaPausa != null) {
             escenaPausa.draw();
+        }
+
+        // Tecla de BACK ???
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+            // Regresar a la pantalla anterior (ACCION)
+            juego.setScreen(new PantallaMenu(juego));
         }
     }
 
